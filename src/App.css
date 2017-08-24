@@ -1,0 +1,12 @@
+.flex-grid {
+  display: grid; /* display: inline-grid;*/
+  grid-template-columns: 1fr 1fr 1fr; /* 3 x 1 fraction */
+}
+
+.col {
+min-width: 200px;
+min-height: 200px;
+  border: 1px solid red;
+  text-align: center;
+  font-size: 35px;
+}
