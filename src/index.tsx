@@ -3,43 +3,24 @@ import * as ReactDOM from 'react-dom';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { FieldState } from "./Field";
-export interface State {
-  board: FieldState[][];
-  activePlayer: 'X' | 'O';
-}
-const defaultState: State = {
-  board: (Array(3).fill(Array(3).fill({ value: null, fieldIdx: -1, rowIdx: -1 } as FieldState)) as FieldState[][]).map((row, rowIdx) => row.map((field, fieldIdx) => ({ ...field, fieldIdx, rowIdx }))),
-  activePlayer: 'X'
-}
+import { gameState } from "./reducers/gameState";
+import { logger } from "./middleware/logger";
+import { registerBot } from "./middleware/bot";
+import { FIELD_LEAVE, FIELD_ENTER, FIELD_CLICK } from "./actions/gameState";
 
-function rootReducer(currentState: State, action: { type: string, payload: any }) {
-  switch (action.type) {
-    case 'FIELD_CLICK':
-      return {
-        ...currentState,
-        board: currentState.board.map((row, rowIdx) => row.map((currentField, fieldIdx) => ({
-          ...currentField,
-          value: (action.payload as FieldState).fieldIdx === fieldIdx
-            && (action.payload as FieldState).rowIdx === rowIdx
-            && currentField.value === null
-            ? currentState.activePlayer
-            : currentField.value
-        }))),
-        activePlayer: (currentState.activePlayer === 'X' ? 'O' : 'X' as 'X' | 'O')
-      }
-    default:
-      return defaultState;
-  }
-}
 
-const store = createStore(rootReducer);
+const store = createStore(gameState, applyMiddleware(logger));
+
+registerBot(store);
 
 const render = () => ReactDOM.render(
   <App
     state={store.getState()}
-    onFieldClick={(x: FieldState) => store.dispatch({ type: 'FIELD_CLICK', payload: x })}
+    onClick={(x: FieldState) => store.dispatch({ type: FIELD_CLICK, payload: x })}
+    onMouseEnter={(x: FieldState) => store.dispatch({ type: FIELD_ENTER, payload: x })}
+    onMouseLeave={(x: FieldState) => store.dispatch({ type: FIELD_LEAVE, payload: x })}
   />,
   document.getElementById('root') as HTMLElement
 );
