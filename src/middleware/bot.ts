@@ -11,6 +11,29 @@ let current: GameState;
 
 export function registerBot(store: Store<GameState>) {
 
+  
+
+
+  function rankMove(move: FieldState): number {
+
+    // 1. try to win with the next move 
+    // 2. prevent other player from winning => does he win when this field is not moved to
+    // 3. try to place in corner 
+
+    // random is not AI :)
+    const r = Math.floor((Math.random() * 10) + 1);
+
+    return r;
+  }
+
+  function rankMoves(possibleMoves: FieldState[]): { move: FieldState, rank: number }[] {
+    return possibleMoves.map((move, idx) => ({
+      move,
+      rank: rankMove(move)
+    }))
+  }
+
+
   function perform(x: FieldState) {
     store.dispatch({ type: FIELD_CLICK, payload: x });
   }
@@ -27,16 +50,13 @@ export function registerBot(store: Store<GameState>) {
     }
     console.log('thinking ...');
 
-    const moves = getPossibleMoves(current);
+    const possibleMoves = getPossibleMoves(current);
 
-    const [move] = moves.map((move, idx) => ({
-      move,
-      rank: 0 // cal rank of move
-    }))
-    .sort((a, b) => a.rank >= b.rank ? 0 : 1)
-    .map(it => it.move);
+    const [bestMove] = rankMoves(possibleMoves)
+      .sort((a, b) => a.rank >= b.rank ? 0 : 1)
+      .map(it => it.move);
 
-    perform(move)
+    perform(bestMove)
 
     console.log('done ...');
 
