@@ -9,4 +9,15 @@ min-height: 200px;
   border: 1px solid red;
   text-align: center;
   font-size: 35px;
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 48px;
+  background: transparent;
+  color: #000;
+}
+.winner{
+  background-color: green;
+}
+.hasValue{
+  background-color: gainsboro;
 }

@@ -21,7 +21,7 @@ const defaultState: GameState = {
   hoverRollback: null
 }
 
-export function gameState(currentState: GameState, { type, payload }: { type: string, payload: FieldState }) {
+export function gameStateReducer(currentState: GameState, { type, payload }: { type: string, payload: FieldState }):GameState {
   switch (type) {
     case FIELD_CLICK:
       return {

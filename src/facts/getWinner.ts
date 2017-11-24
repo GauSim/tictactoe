@@ -1,15 +1,10 @@
-import { GameState } from "../reducers/gameState";
 import { PlayerState } from "../Field";
-type T = { winner: PlayerState | null, reason: [number, number, number] }
+import { BoardState } from "../reducers/gameStateReducer";
+export type T = { winner: PlayerState | null, reason: [number, number, number] }
 
-export function getWinner(state: GameState): T {
+export function getWinner(board: BoardState): T {
 
   const none: T = { winner: null, reason: [-1, -1, -1] };
-
-  const allMovesCommitted = !state.board.some(it => !it.isCommited);
-  if (!allMovesCommitted) {
-    return { ...none };
-  }
 
   const lines = [
     [0, 1, 2],
@@ -24,11 +19,12 @@ export function getWinner(state: GameState): T {
 
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
-    if (state.board[a].value === state.board[b].value
-      && state.board[a].value === state.board[c].value) {
-      return { winner: state.board[a].value, reason: [a, b, c] };
+    if (board[a].value && board[b].value && board[c].value
+      && board[a].isCommited && board[b].isCommited && board[c].isCommited
+      && board[a].value === board[b].value && board[b].value === board[c].value) {
+      return { winner: board[a].value, reason: [a, b, c] };
     };
   }
-  
+
   return { ...none };
 }

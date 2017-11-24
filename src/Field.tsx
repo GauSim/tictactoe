@@ -14,14 +14,18 @@ export class Field extends React.Component<{
 } & FieldState> {
   hover: boolean = false;
   render() {
-    return <div
-      className="col"
+    return <button
+      className={(this.props.highlight ? 'winner' : (this.props.value && this.props.isCommited ? 'hasValue' : '')) + ' col'}
       onMouseEnter={() => this.props.onMouseEnter(this.props)}
       onMouseLeave={() => this.props.onMouseLeave(this.props)}
       onClick={() => this.props.onClick(this.props)}
     >
-      {this.props.highlight ? 'YEAH' : ''}
-      {this.props.isCommited ? this.props.value : `?${this.props.value}?`}
-    </div>;
+      {this.props.highlight
+        ? this.props.value +' WIN!'
+        : (this.props.isCommited ? this.props.value : `?${this.props.value}?`)
+      }
+
+      {this.props.value ? '' : this.props.idx}
+    </button>;
   }
 }

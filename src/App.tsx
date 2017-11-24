@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './App.css';
 import { Field, FieldState } from './Field';
-import { GameState } from "./reducers/gameState";
+import { GameState } from "./reducers/gameStateReducer";
 import { getPossibleMoves } from "./facts/getPossibleMoves";
 import { getWinner } from "./facts/getWinner";
 
@@ -13,7 +13,8 @@ class App extends React.Component<{
 }> {
   render() {
 
-    const { winner, reason } = getWinner(this.props.state);
+    const { winner, reason } = getWinner(this.props.state.board);
+    
     return (
       <div className="App">
         <span>

@@ -5,15 +5,18 @@ import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 import { createStore, applyMiddleware } from 'redux';
 import { FieldState } from "./Field";
-import { gameState } from "./reducers/gameState";
+import { gameStateReducer } from "./reducers/gameStateReducer";
 import { logger } from "./middleware/logger";
 import { registerBot } from "./middleware/bot";
 import { FIELD_LEAVE, FIELD_ENTER, FIELD_CLICK } from "./actions/gameState";
 
 
-const store = createStore(gameState, applyMiddleware(logger));
+const store = createStore(gameStateReducer, applyMiddleware(logger));
 
-registerBot(store);
+registerBot('X',store);
+
+registerBot('O',store);
+
 
 const render = () => ReactDOM.render(
   <App
